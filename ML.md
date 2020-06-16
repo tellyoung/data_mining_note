@@ -44,6 +44,7 @@ Early stopping means training until the validation error does not decrease for a
 
 ### 参数更新
 >出现的问题
+
 1. AdaGrad
 2. RMSProp
 3. SGD+Momentum
@@ -62,3 +63,10 @@ Early stopping means training until the validation error does not decrease for a
 3. GoogLeNet
 	- 多个小卷积代替大卷积
 4. ResNet
+
+
+## RNN
+Vanilla RNN matrix + ReLU
+
+## LSTM
+1. 如何解决梯度消失问题
