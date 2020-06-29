@@ -241,6 +241,21 @@ Vanilla RNN matrix + ReLU
 
 # 广告
 
+## 倒排索引
+当用户在主页上搜索关键词“华为手机”时，假设只存在正向索引（forward index），那么就需要扫描索引库中的所有文档，找出所有包含关键词“华为手机”的文档，再根据打分模型进行打分，排出名次后呈现给用户。因为互联网上收录在搜索引擎中的文档的数目是个天文数字，这样的索引结构根本无法满足实时返回排名结果的要求。
+
+所以，搜索引擎会将正向索引重新构建为倒排索引，即把文件ID对应到关键词的映射转换为关键词到文件ID的映射，每个关键词都对应着一系列的文件，这些文件中都出现这个关键词。
+得到倒排索引的结构如下：
+“关键词1”：“文档1”的ID，“文档2”的ID，…………。
+“关键词2”：带有此关键词的文档ID列表。
+从词的关键字，去找文档。
+
+
+
+
+
+
+
 # NLP
 
 ## 概念
@@ -315,9 +330,30 @@ https://www.cnblogs.com/strangewx/p/10316413.html
 
 
 
-
-
 # python
+
+## 版本控制
+### conda
+```shell
+conda create -n env_name python=3.7
+conda env remove -n env_name
+activate env_name
+conda env list
+
+conda list
+conda install package_name
+```
+
+### virtualenv
+```shell
+virtualenv --no-site-packages venv
+virtualenv --python=python2.7 --no-site-packages venv
+source venv/bin/activate
+deactivate 
+rm -rf venv
+
+pip list
+```
 
 ## print
 ```python
