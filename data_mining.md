@@ -45,15 +45,63 @@
   根据类别在训练集中的频次排序类别（升序或降序）,用序号表示类别
 
 ## 组合特征
-  用降维的方法来减小两个高维特征组合后需要学习的参数
-
+  ### 矩阵分解
+  用降维的方法来减小两个高维特征组合后的特征维度
+  ### 决策树解决特征组合问题
 
 
 ## 图像处理
 
 ## 文本处理
 
+### 词袋模型（Bag of Words）
+将每篇文章看成一袋子词，并忽略每个i司出现的顺序
+将整段文本以词为单位切分开，然后每篇文章可以表示成一个长向量，向量中的每一维代表一个主要词，而该维对应的权重则反映了这个词在原文章中的重要程度
+
+### TF - IDF
+>TF-IDF(Term Frequency-Inverse Document Frequency, 词频-逆文件频率).
+>TF-IDF是一种统计方法，用以评估一字词对于一个文件集的重要程度或一个语料库中的其中一份文件的重要程度。字词的重要性随着它在文件中出现的次数成正比增加，但同时会随着它在语料库中出现的频率成反比下降。
+
+一个词语在一篇文章中出现次数越多, 同时在所有文档中出现次数越少, 越能够代表该文章.
+
+- 词频 (term frequency, TF) 指的是某一个给定的词语在该文件中出现的次数。这个数字通常会被归一化(一般是需要除以文章总词数), 以防止它偏向长的文件。
+
+  ![img](http://www.ruanyifeng.com/blogimg/asset/201303/bg2013031504.png)
+
+- 逆向文件频率 (inverse document frequency, IDF) IDF的主要思想是：**如果包含词条t的文档越少, IDF越大，则说明词条具有很好的类别区分能力。**某一特定词语的IDF，可以由总文件数目除以包含该词语之文件的数目，再将得到的商取对数得到。
+
+如果一个单词在非常多的文章里面都出现， 那么它可能是一个比较通用的词汇，对于区分某篇文章特殊语义的贡献较小， 因此对权重做一定惩罚。
+
+某一特定文件内的高词语频率，以及该词语在整个文件集合中的低文件频率，可以产生出高权重的TF-IDF。因此，TF-IDF倾向于过滤掉常见的词语，保留重要的词语。
+
+![img](http://www.ruanyifeng.com/blogimg/asset/201303/bg2013031506.png)
+
+![img](http://www.ruanyifeng.com/blogimg/asset/201303/bg2013031507.png)
+
+
+- N - gram 模型
+	- 以将连续出现的n 个词( n <= N ） 组成的词组（ N-gram ）作为一个单独的恃征放到向量表示中去，向成 N - gram 模型
+
+- 词干抽取
+	- 同一个词可能有多种词性变化，却有着相似的含义。在实际应用中，一般会对单词进行词干抽取（ Word Stemming ）处理，即将不同词性的单词统一成为同一词干的形式。
+
+### 词嵌入
+词嵌入是一类将词向量化的模型的统称， 核心思想是将每个词都向量表示映射成低维空间（通常     K=50 ～ 300 维）上的一个稠密向量（ Dense Vector ）
+
+### 隐狄利克雷模型（ LDA)
+
 ### word2vec
+>Word2Vec 实际是一种浅层的神经网络模型， 它有两种网络结构，分别是CBOW (Continues Bag of Words ）和 Skip-gram。
+
+- CBOW 的目标是根据上下文出现的词语来预测当前词的生成慨率
+
+- Skip-gram 是根据当前词来预测上下文中各词的生成概率
+
+- Hierarchical Softmax
+
+- Negative Sampling  负采样
+
+
 sentences它是一个list，size表示输出向量的维度。
 window：
 min_count：用于字典阶段，词频少于min_count次数的单词会被丢弃掉，默认为5
@@ -99,22 +147,6 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
 
 ```
-### TF - IDF
->TF-IDF(Term Frequency-Inverse Document Frequency, 词频-逆文件频率).
->TF-IDF是一种统计方法，用以评估一字词对于一个文件集的重要程度或一个语料库中的其中一份文件的重要程度。字词的重要性随着它在文件中出现的次数成正比增加，但同时会随着它在语料库中出现的频率成反比下降。
-
-一个词语在一篇文章中出现次数越多, 同时在所有文档中出现次数越少, 越能够代表该文章.
-
-- 词频 (term frequency, TF) 指的是某一个给定的词语在该文件中出现的次数。这个数字通常会被归一化(一般是词频除以文章总词数), 以防止它偏向长的文件。
-
-  ![img](http://www.ruanyifeng.com/blogimg/asset/201303/bg2013031504.png)
-
-- 逆向文件频率 (inverse document frequency, IDF) IDF的主要思想是：**如果包含词条t的文档越少, IDF越大，则说明词条具有很好的类别区分能力。**某一特定词语的IDF，可以由总文件数目除以包含该词语之文件的数目，再将得到的商取对数得到。
-某一特定文件内的高词语频率，以及该词语在整个文件集合中的低文件频率，可以产生出高权重的TF-IDF。因此，TF-IDF倾向于过滤掉常见的词语，保留重要的词语。
-
-![img](http://www.ruanyifeng.com/blogimg/asset/201303/bg2013031506.png)
-
-![img](http://www.ruanyifeng.com/blogimg/asset/201303/bg2013031507.png)
 
 
 
@@ -127,16 +159,151 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 ```
 
 
+## 图像样本不足
+
+- 是基于模型的方法，主要是采用降低过拟台风险的措施，包括简化模型（如将非线性模型简化为线性模型）、添加约束项以缩小假设空间（如Ll / L2正则顶）、集成学习、Dropout 超参数等；
+
+- 二是基于数据的方法， 主要通过数据扩充（ Data Augmentation ），即根据一些先验知识，在保
+持特定信息的前提下，对原始数据进行适当变换以达到扩充数据集的效果。具体到图像分类任务中 在保持图像类别不变的前提下，可以对训练集中的每幅图像进行以下变换。
+
+( 1 ）一定程度内的随机旋转、平移、缩版、裁剪、填充、左右翻转等，这些变换对应着同一个目标在不同角度的观察结果。
+( 2 ）对图像中的像素添加躁声扰动，比如椒盐噪声、高斯自噪声等。
+( 3 ）颜色变换。
+( 4 ）改变图像的亮度、清晰度、对比度、锐度等。
+
+- 除了直接在图像空间进行变换，还可以先对国像进行特征提取，然后在图像的特征空间内进行变换，利用一些通用的数据扩充或上采样技术，例如SMOTE ( Synthetic Minority Over” sampling Technique )算法。
+- 生成式对抗网络模型。
+- 迁移学习。对于大部分图像分类任务，并不需要从头开始训练模型，而是借用一个在大规模数据集上预训练好的通用模型，并在针对目标任务的小数据集上进行微调（ fine-tune ）。
+
+
+# 模型评估
+
+## 准确率（ Accuracy ）
+>准确率是指分类正确的样本个数占总样本个数的比例
+
+**存在问题：**当不同类别的样本比例非常不均衡时，占比大的类别往往成为影响准确率的最主要因素
+可使用平均准确率（ 每个类别下的样本准确率的算术平均）作为模型评估的指标
+
+
+## 精确率（ Precision ）和 召回率（ Recall ）
+
+- 精确率是自分类正确的正样本个数 占 分类器判定为正样本的样本个数的比例。
+- 召回率是指分类正确的正样本个数  占 真正的正样本个数的比例。
+
+为了提高Precision 值，分类器需要尽量在“更高把握”时才把样本预测为正样本，但此时往往会因为过于保守而漏掉很多“没有把握”的正样本，导致Recall值降低
+
+**P-R (Precision-Recall ）曲线**
+P - R 曲线上的一个点代表着，在某一阈值下，模型将大于该阈值的结果判定为正样本，小于i亥闺值的结果判定为负样本，此时返回结果对应的召回率和精确率。
+![image-20200707132606109](C:\Users\yuty\AppData\Roaming\Typora\typora-user-images\image-20200707132606109.png)
+
+- 只用某个点对应的精确率和召回率是不能全面地衡量模型的性能， 只有通过P - R 曲线的整体表现，才能够对模型进行更为全面的评估。
+
+- F1 score 是精准率和召回率的调和平均值
+<img src="C:\Users\yuty\AppData\Roaming\Typora\typora-user-images\image-20200707133150135.png" alt="image-20200707133150135" style="zoom: 67%;" />
+
+
+## 均方根误差(Root Mean Square Error, RMSE)
+>回归模型
+RMSE 能够很好地反映回归模型预测值与真实值的偏离程度。但在实际问题中，如果存在个别偏离程度非常大的离群点( Outlier ）时，即使离群点数量非常少，也会让RMSE 指标变得很差。
+
+![image-20200707134741984](data_mining.assets/image-20200707134741984.png)
+
+- 第一，如果我们认定这些离群点是“ 噪声点” 的话，就需要在数据预处理的阶段把这些噪声点过滤掉。
+- 第二，如果不认为这些离群点是“噪声点”的话，就需要进一步提高模型的预测能力， 将离群点产生的机制建模进去
+- 第三，可以找一个更合适的指标采评估该模型。关于评估指标，真实是存在比RMSE 的鲁棒性更好的指标，比如平均绝对百分比误差（ Mean Absolute Percent Error, MAPE ） 。MAPE 相当于把每个点的误差进行了归一化， 降低了个别离群点带来的绝对误差的影响。
+![image-20200707134645449](data_mining.assets/image-20200707134645449.png)
+
+
+## ROC曲线和AUC
+>ROC 曲线是Receiver Operating Characteristic Curve 的简称，中文名为“受试者工作特征由线” 
+>曲线下的面积（ Aera Under Curve, AUC)，AUC指的是ROC 曲线下的面积大小，该值能够量化地反映基于ROC 曲线衡量出的模型性能。
+>ROC 曲线的横坐标为假阳性率（ False Positive Rate, FPR ），纵坐标为真阳性率（ True Positive Rate, TPR ）
+
+P 是真实的正样本的数量， N 是真实的负样本的数量， TP 是P 个正样本中被分类器预测为正样本的个数， FP 是N 个负样本中被分类器预测为正样本的个数。
+
+![image-20200707140431451](data_mining.assets/image-20200707140431451.png)
+
+- 在输出最终的正例、负例之前,我们需要指定一个阈值 ，预测概率大于该阈值的样本会被判为正例，小于阈值的样本则会被判为负例。
+
+![image-20200707140653199](data_mining.assets/image-20200707140653199.png)
+
+- AUC越大， 说明分类器越可能把真正的正样本排在前面， 分类性能越好。
+
+- 相比P -R 曲线， ROC 曲线有一个特点，当正负样本的分布发生变化时， ROC 曲线的形状能够基本保持不变，而P - R 曲线的形状一般会发生较剧烈的变化。
+
+图2.3 是ROC 曲线和P -R 曲线的对比图， 其中图2.3 ( a）和国2.3 ( c ）是ROC 曲线，图2.3 ( b ）和图2.3 ( d ）是P-R 由线，图2.3( c ）和图2.3 ( d ）则是将测试集中的负样本数量增加10 倍后的曲线图。
+
+![image-20200707140954428](data_mining.assets/image-20200707140954428.png)
+
+## 余弦距离
+>在机器学习问题中，通常将特征表示为向量的形式，所以在分析两个特征向量之间的
+相似性时，常使用余弦相似度来表示。
+>余弦相似度的取值范围是［-1, 1]，相同的两个向量之间的相似度为1 。
+>如果希望得到类似于距离的表示，将1减去余弦相似度即为余弦距离,取值范围为[ 0,2 ］，相同的两个向量余弦距离为0 。
+
+1. 余弦相似度 
+    即两个向量夹角的余弦，关注的是向量之间的角度关系
+
+  cosθ=向量a.向量b/|向量a|×|向量b|
+
+<img src="data_mining.assets/image-20200708105646605.png" alt="image-20200708105646605" style="zoom: 150%;" />
+
+
+2. 余弦距离
+
+		`余弦距离 = 1 - cos（A，B）`
+
+![image-20200708111721289](data_mining.assets/image-20200708111721289.png)
+
+![image-20200708111757377](data_mining.assets/image-20200708111757377.png)
+
+![image-20200708111819368](data_mining.assets/image-20200708111819368.png)
+
+
+3. 欧式距离
+![img](https://bkimg.cdn.bcebos.com/formula/87a52feb423631405eb499ddaec6941d.svg)
+
+- 欧氏距离体现数值上的绝对差异，而余弦距离体现方向上的相对差异
+
+![image-20200708110842771](data_mining.assets/image-20200708110842771.png)
+
+
+## A/B测试
+>进行A/B 测试的主要手段是进行用户分桶，即将用户分成实验组和对照组，对实验组的用户施以新模型，对对照组的用户施以旧模型。
+
+在分桶的过程中，要注意样本的独立性和采样方式的无偏性，确保同一个用户每次只能分到同一个桶中，在分桶过程中所选取的user_id 需要是个随机数，这样才能保证桶中的样本是无偏的。
+
+为什么必须进行A/B测试
+( 1 ）离线评估无法完全消除模型过拟合的影响，因此，得出的离线评估结果无法完全替代线上评估结果。
+( 2 ）离线评估无法完全还原线上的工程环境。一般来讲，离结评估往往不会考虑线上环境的延迟、数据丢失、标签数据缺失等情况。因此，离线评估的结果是理想工程环境下的结果。
+( 3 ）线上系统的某些商业指标在离线评估中无法计算。
+
+## 模型验证方法
+1. Holdout检验
+	简单划分一次训练集和测试集
+
+2. 交叉验证
+k-fold 交叉验证·首先将全部样本划分成k 个大小相等的样本子集，依次遍历这k 个子集，每次把当前子集作为验证集，其余所有子集作为训练集，进行模型的训练和评估；
+最后把k 次评估指标的平均值作为最终的评估指标。
+
+3. 自助法
+自助法是基于自助采样法的检验方法。对于总数为 n 的样本集合进行 n 次有放回的随机抽样，得到大小为 n 的训练集。n 次采样过程中的样本会被重复采样，有的样本没有被抽出过，将这些没有被抽出的样本作为验证集，进行模型验证，这就是自助法的验证过程。
+- 当样本数很大时，  大约有36.8% 的样本从未被选择过，可作为验证集。
+
+
+## 超参数调优
 
 
 
 
 
+## 过拟合与欠拟合
 
 
-## 基础概念
 
-### 二范数
+# 基础概念
+
+## 二范数
 向量范数：向量x的2范数是 x中各个元素平方之和再开根号；
 
 
@@ -324,24 +491,170 @@ https://www.cnblogs.com/strangewx/p/10316413.html
 
 - 一般来说，N元模型就是假设当前词的出现概率只与它前面的N-1个词有关
 
-  
-
 在实践中用的最多的就是bigram和trigram了，高于四元的用的非常少，由于训练它须要更庞大的语料，并且数据稀疏严重，时间复杂度高，精度却提高的不多。
+
+## spacy
+
+```python
+from spacy.lang.en import English  # Import the English language class
+nlp = English()                    # Create the nlp object
+
+# Created by processing a string of text with the nlp object
+doc = nlp("Let's get going. Pick up the pace. Finish up now.")
+
+# 德语版本
+from spacy.lang.de import German
+nlp = German()
+doc = nlp("Liebe Grüße!")
+
+slice = doc[2: 6]
+print(slice.text) # 字符串分词内容
+```
+
+### Statistics models
+- to predict linguistic attributes in context
+    - Part-of-speech tags
+    - Syntactic dependencies
+    - Named entities
+In spaCy, attributes that return strings usually end with an underscore – attributes without the underscore return an integer ID value.
+
+![Visualization of the dependency graph for 'She ate the pizza'](https://course.spacy.io/dep_example.png)
+
+- nsubj	--nominal subject       名词性主语
+- dobj	--direct object	          直接宾语
+- det      --determiner	            指代词
+
+1. `token.pos_`   单词的词性 动词\名词\形容词
+`token.dep_`   returns the predicted dependency label.
+`token.head.text`  returns the syntactic head token
+
+2. The` doc.ents` property lets you access the named entities predicted by the model, It returns an iterator of Span objects
+
+
+```python
+import spacy
+nlp = spacy.load("en_core_web_sm") # 加载预训练模型
+doc = nlp("She ate the pizza")
+for token in doc:
+    print(token.text, token.pos_, token.dep_, token.head.text)
+'''
+She PRON nsubj ate
+ate VERB ROOT ate
+the DET det pizza
+pizza NOUN dobj ate
+'''
+
+# Named entities are "real world objects" 
+doc = nlp("Apple is looking at buying U.K. startup for $1 billion")
+for ent in doc.ents:
+    print(ent.text, ent.label_)  # Print the entity text and its label
+'''
+Apple ORG 
+U.K. GPE
+$1 billion MONEY
+"Apple" as an organization, "U.K." as a geopolitical entity and "$1 billion" as money.
+'''
+
+spacy.explain("GPE")
+```
+
+### matcher
+>类似正则表达式, 用来在文本中匹配所需要的词语
+```python
+import spacy
+from spacy.matcher import Matcher
+
+nlp = spacy.load("en_core_web_sm")
+
+# Initialize the matcher with the shared vocab
+matcher = Matcher(nlp.vocab)
+
+# Add the pattern to the matcher
+pattern = [{"TEXT": "iPhone"}, {"TEXT": "X"}]
+matcher.add("IPHONE_PATTERN", None, pattern)
+#The first argument is a unique ID to identify which pattern was matched
+#The second argument is an optional callback.
+#The third argument is the pattern.
+
+
+# Process some text
+doc = nlp("Upcoming iPhone X release date leaked")
+
+# Call the matcher on the doc
+matches = matcher(doc)
+
+# Iterate over the matches
+for match_id, start, end in matches:
+    # Get the matched span
+    matched_span = doc[start:end]
+    print(matched_span.text)
+    
+------------------------------------------------------------------------
+Write one pattern that only matches forms of “download” (tokens with the lemma “download”), followed by a token with the part-of-speech tag "PROPN" (proper noun).
+LEMMA
+import spacy
+from spacy.matcher import Matcher
+
+nlp = spacy.load("en_core_web_sm")
+matcher = Matcher(nlp.vocab)
+
+doc = nlp(
+    "i downloaded Fortnite on my laptop and can't open the game at all. Help? "
+    "so when I was downloading Minecraft, I got the Windows version where it "
+    "is the '.zip' folder and I used the default program to unpack it... do "
+    "I also need to download Winzip?"
+)
+
+# Write a pattern that matches a form of "download" plus proper noun
+pattern = [{"LEMMA": "download"}, {"POS": "PROPN"}]
+
+# Add the pattern to the matcher and apply the matcher to the doc
+matcher.add("DOWNLOAD_THINGS_PATTERN", None, pattern)
+matches = matcher(doc)
+print("Total matches found:", len(matches))
+
+# Iterate over the matches and print the span text
+for match_id, start, end in matches:
+    print("Match found:", doc[start:end].text)
+```
+
+
+# CV
+
+
+
 
 
 
 # python
+
+## 第三方库安装
+```shell
+pip install Package_name
+pip show --files Package_name     # 查看pip uninstall SomePackage的详细信息
+pip list --outdated               # 检查哪些包需要更新
+pip install --upgrade Package_name # 升级包
+pip uninstall Package_name         # 卸载包
+
+```
 
 ## 版本控制
 ### conda
 ```shell
 conda create -n env_name python=3.7
 conda env remove -n env_name
-activate env_name
+conda activate env_name
+conda deactivate
 conda env list
 
 conda list
+conda list -n env_name
+conda search numpy  # 查找package信息
+
 conda install package_name
+conda remove -n env_name numpy   # 删除package
+conda update -n env_name numpy   # 更新package
+conda update -n base conda       # 更新conda，保持conda最新
 ```
 
 ### virtualenv
@@ -354,6 +667,22 @@ rm -rf venv
 
 pip list
 ```
+## 模块化
+
+- `__pycache__文件夹`
+python解释器会将 *.py 脚本文件进行编译，并将编译结果保存到__pycache__目录中。下次再执行工程时，若解释器发现这个 *.py 脚本没有修改过，就会跳过编译这一步，直接运行以前生成的保存在 __pycache__文件夹里的 *.pyc 文件。这样工程较大时就可以大大缩短项目运行前的准备时间。
+
+- `if __name__ == '__main__':`
+当文件被执行时，`__name__`的值就是`'__main__'`
+
+- `import`
+```
+from . import XXX
+
+
+
+```
+
 
 ## print
 ```python
@@ -390,6 +719,8 @@ array([1, 2, 3, 4, 5, 6])
 
 
 # numpy
+
+
 
 
 # pandas
@@ -441,6 +772,14 @@ array([[1, 0, 2],
 （2）shape表示矩阵的形状
 （3）indices表示对应data中的数据，在压缩后矩阵中各行的下标，如：数据1在某行的0位置处，数据2在某行的2位置处，数据6在某行的2位置处。
 （4）indptr表示压缩后矩阵中每一行所拥有数据的个数，如：[0 2 3 6]表示从第0行开始数据的个数，0表示默认起始点，0之后有几个数字就表示有几行，第一个数字2表示第一行有2 - 0 = 2个数字，因而数字1，2都第0行，第二行有3 - 2 = 1个数字，因而数字3在第1行，以此类推。
+
+# sklearn
+
+## metrics
+`metrics.roc_auc_score(y_test, y_pro) 
+`metrics.accuracy_score(y_test, y_pre) 
+
+
 
 
 
@@ -517,6 +856,7 @@ params = {'num_leaves': 60, #结果对最终效果影响较大，越大值越好
 ## metric
 
 
+# XGboost
 
 
 # kears
@@ -560,18 +900,18 @@ torch.tensor([5.5, 3, 6, 9]) # 从数据直接直接构建tensor
 torch.empty(5, 3)      # 构造一个未初始化的5x3矩阵
 torch.rand(5, 3)       # 构建一个随机初始化的矩阵
 torch.ones(5, 3)
-torch.zeros(5, 3, dtype=torch.long)  # 构建一个全部为0，类型为long的矩阵
-torch.randn_like(x, dtype=torch.float) # override dtype!result has the same size
+torch.zeros(5, 3, dtype=torch.long)  # 构建一个全部为0，类型为long(int)的矩阵
+torch.randn_like(x, dtype=torch.float) # override dtype! result has the same size
+x = x.new_ones(5, 3, dtype=torch.double)  # new size and new tensor
 
 x.size() 得到tensor的形状
 
-x + y
-torch.add(x, y)
+torch.add(x, y) # x + y
 torch.add(x, y, out=result) # result = torch.empty(5, 3)
 y.add_(x) # 会改变y
 # 任何in-place的运算都会以``_``结尾。 举例来说：``x.copy_(y)``, ``x.t_()``, 会改变 ``x``
 
-x.view(16) # reshape一个tensor
+x.view(16) # reshape tensor x
 x.view(-1, 8)
 
 x.item() # 只有一个元素的tensor 返回数值
@@ -584,8 +924,12 @@ b = torch.from_numpy(a)
 
 ## 矩阵运算
 ```python
-x.dot(y) # x, y 矩阵相乘
+x.data # tensor
+x.data.norm() # 求张量x的第二范式
 
+x.dot(y) # x, y 矩阵相乘
+torch.pow(x, 2) # 矩阵每个元素平方
+torch.sum(x)
 ```
 
 ## CUDA
@@ -603,6 +947,7 @@ if torch.cuda.is_available():
 
 ```
 ## autograd
+求导，只能是【标量】对标量，或者【标量】对向量/矩阵求导！
 ```python
 # Create tensors.
 x = torch.tensor(1., requires_grad=True)
@@ -654,6 +999,21 @@ drop = nn.Dropout(p=0.2)
 input = torch.randn(20, 16)
 output = drop(input)
 ```
+4. `nn.Conv2d()`
+`m = nn.Conv2d(16, 33, 3, stride=1)`
+
+- in_channels (int) – Number of channels in the input image
+
+- out_channels (int) – Number of channels produced by the convolution
+
+- kernel_size (int or tuple) – Size of the convolving kernel
+
+- padding (int or tuple, optional) – Zero-padding added to both sides of the input. Default: 0
+
+
+## `import torch.nn.functional as F`
+
+
 
 ##  torchtext
 
