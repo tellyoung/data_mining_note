@@ -7,8 +7,6 @@ copy.deepcopy(head) # 深拷贝复杂链表
 l.sort(key=)  # 默认升序 / key=len，
 sorted(l)
 
-[str(i) for i in l]
-
 for index, value in enumerate(some_list): # 枚举
     mapping[value] = index # mapping = {}
 
@@ -60,21 +58,7 @@ collections.Counter('dsf')
 Counter({'d': 1, 's': 1, 'f': 1})
 
 -----------
-heapq # 最小堆
-import heapq
-heap = [1,2,3,5,1,5,8,9,6]
-heapq.heappush(heap, item)  # heap为定义堆，item增加的元素
-
-heapq.heapify(heap) # 将列表转换为堆
-x = heapq.heappop(heap) # 弹出堆顶最小值，重建堆
-x = heapq.heapreplace(heap, item) #  弹出最小元素值，替换新的元素值，重建堆
-heapq.merge(heap1, heap2) # 合并两个堆
-for i in heapq.merge(heap1, heap2):
-    print(i, end=" ")
-heapq.nlargest(n, heap)  # n个最大元素 
-heapq.nsmallest(n, heap)  # n个最小元素
-
-
+# 
 记录路径时若直接执行res.append(path) ，则是将 path 列表对象 加入了 res ；
 后续 path 对象改变时， res 中的 path 对象 也会随之改变（因此肯定是不对的，
 本来存的是正确的路径 path ，后面又 append 又 pop 的，就破坏了这个正确路径）。

@@ -99,8 +99,8 @@ data.sort_index(level=1) # key1是level=0，key2是level=1
 
 data.sum(level='key2/col_name', axis=)
 data.set_index(['col_name1', 'col_name2'], drop=False) # 已有列作为多层索引
-data.reset_index() # 重新设置索引0-n  把原来的多层级索引变为列
-
+data.reset_index(drop=Ture) # 重新设置索引0-n  把原来的多层级索引变为列
+# 删除原来的index
 --------------------------------------------------
 data.sum() # 同一列的所有行求和 / data.sum(axis=1) 同一行的所有列求和
 data.mean(axis=1, skipna=True) # 跳过缺失值
@@ -147,6 +147,7 @@ data = data.drop_duplicates() # para: ['col_name', ], keep='last'
 '''
 	缺失值处理
 '''
+reset_index
 data.dropna(axis=1, how=) # 默认删除包含nan的所有行/how='all'只删除完全缺失的行/axis=1删除列
 data[data.notnull()]
 data.isnull().sum() / len(data)
