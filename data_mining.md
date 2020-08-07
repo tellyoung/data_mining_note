@@ -6,10 +6,43 @@
 ### 方差
 1. 标准差
 	标准差是方差的算术平方根
+### 协方差
+
+>   衡量两个变量的总体误差
+>   协方差表示的是两个变量的总体的误差，这与只表示一个变量误差的方差不同。
+
+- 如果两个变量的变化趋势一致，也就是说如果其中一个大于自身的期望值，另外一个也大于自身的期望值，那么两个变量之间的协方差就是正值。 
+
+- 如果两个变量的变化趋势相反，即其中一个大于自身的期望值，另外一个却小于自身的期望值，那么两个变量之间的协方差就是负值。
+
+期望值分别为E[X]与E[Y]的两个实随机变量X与Y之间的协方差Cov(X,Y)定义为：
+
+![img](https://bkimg.cdn.bcebos.com/formula/32ab8c25259851a89027c916cc506e27.svg)
+
+### 相关系数
+
+>较为常用的是皮尔逊相关系数，研究变量之间线性相关程度的量，一般用字母 r 表示。
+
+- 相关系数是用以反映变量之间相关关系密切程度的统计指标。
+- 相关系数按积差方法计算，同样以两变量与各自平均值的离差为基础，通过两个离差相乘来反映两变量之间相关程度。
+	- .00-.19 “very weak”
+   	- .20-.39 “weak”
+   	- .40-.59 “moderate”
+    - .60-.79 “strong”
+   	- .80-1.0 “very strong” 	
+
+![img](https://bkimg.cdn.bcebos.com/formula/565d6ddbd305158d2e80faf420df4417.svg)
+
+Cov(X,Y)为X与Y的协方差，Var[X]为X的方差，Var[Y]为Y的方差
 
 ## 线性代数
 
 ### 矩阵分解
+
+## 高等数学
+### 二范数
+向量范数：向量x的2范数是 x中各个元素平方之和再开根号；
+
 
 
 # 特征工程
@@ -330,21 +363,59 @@ k-fold 交叉验证·首先将全部样本划分成k 个大小相等的样本子
 # 经典算法
 
 ## 支持向量机
+1. 在空间上线性可分的两类点，分别向 SVM 分类的超平面上做投影，这些点在超平面上的投影仍
+然是线性可分的 ？
+	对于任意线性可分的两组点， 它们在 SVM 分类的超平面上的投影都是线性不可分的。
+
+
+2. 是否存在一组参数使 SVM 训练误差为 0 ? 
+	存在
+	
+3. 训练误差为0 的 SVM 分类器一定存在么 ？
+
+
+
+4. 加入松弛变量的 SVM 的训练误差可以为0 吗 ？
 
 
 
 ## 逻辑回归
 
 
+### 使用逻辑回归处理多分类
+
+
 ## 决策树
 
 
+
+
+
 # 降维
+## PCA
+>主成分分析（ Principal Components Analysis, PCA ）
+
+1. 最大方差理论
+>信号具有较大方差， 噪声具有较小方差，信号与躁声之比称为信噪比。信噪比越大意味着数据的质量越好，反之，信噪比越小意昧着数据的质量越差。
+>最大化投影方差，让数据在主轴
+上投影的方差最大。
+
+
 
 
 # 前向神经网络
+多层感知机
+自编码器
+限制玻尔兹曼机
+卷积神经网络
+## 激活函数
+梯度消失
 
+过拟合 正则，模型继承
 
+学习率，权重衰减系数，dropout比例
+
+批量归一化
 
 
 
@@ -366,21 +437,36 @@ k-fold 交叉验证·首先将全部样本划分成k 个大小相等的样本子
 
 # 基础概念
 
-## 二范数
-向量范数：向量x的2范数是 x中各个元素平方之和再开根号；
+## logloss
+```python
+log_loss(y_true, y_pred)
+# 越小越好
+```
+1. Binary Classification
+
+In binary classification (M=2), the formula equals:
+
+![-{(y\log(p) + (1 - y)\log(1 - p))}](http://wiki.fast.ai/images/math/a/4/6/a4651d4ad311666c617d57c1dde37b28.png)
+
+2. Multi-class Classification
+
+In multi-class classification (M>2), we take the sum of log loss values for each class prediction in the observation.
+
+![-\sum_{c=1}^My_{o,c}\log(p_{o,c})](http://wiki.fast.ai/images/math/8/a/a/8aa1e513366a2046bee816f7a0f8dd1c.png)
+
+![Log loss graph.png](http://wiki.fast.ai/images/4/43/Log_loss_graph.png)
 
 
-
-## hyperparameters
+## Hyperparameters
 In contrast to model **parameters** which are learned during training, model **hyperparameters** are set by the data scientist ahead of training and control implementation aspects of the model. 
-
+## Early stopping
 Early stopping means training until the validation error does not decrease for a specified number of iterations.
+
 
 ## 集成学习
 
 ## 交叉熵（Cross Entropy）
 >一般用来求目标与预测值之间的差距
->
 
 1. 信息量
 越不可能的事件发生了，我们获取到的信息量就越大
@@ -398,10 +484,10 @@ DKL的值越小，表示q分布和p分布越接近
 
 4. 交叉熵
       $$DKL(p||q) = ∑p(xi)log(p(xi)) − ∑p(xi)log(q(xi))$$
-                 $$ = −H(p(x)) + [−∑p(xi)log(q(xi))]$$
-
-$$H(p,q)=−∑p(xi)log(q(xi))$$
-在机器学习中，我们需要评估label和predicts之间的差距，使用KL散度刚刚好，即DKL(y||y^)，由于KL散度中的前一部分−H(y)不变，故在优化过程中，只需要关注交叉熵就可以了。所以一般在机器学习中直接用用交叉熵做loss，评估模型
+                         $$ = −H(p(x)) + [−∑p(xi)log(q(xi))]$$
+      
+        $$H(p,q)=−∑p(xi)log(q(xi))$$
+      在机器学习中，我们需要评估label和predicts之间的差距，使用KL散度刚刚好，即DKL(y||y^)，由于KL散度中的前一部分−H(y)不变，故在优化过程中，只需要关注交叉熵就可以了。所以一般在机器学习中直接用用交叉熵做loss，评估模型
 
 
 
@@ -579,7 +665,7 @@ print(slice.text) # 字符串分词内容
     - Part-of-speech tags
     - Syntactic dependencies
     - Named entities
-In spaCy, attributes that return strings usually end with an underscore – attributes without the underscore return an integer ID value.
+
 
 ![Visualization of the dependency graph for 'She ate the pizza'](https://course.spacy.io/dep_example.png)
 
@@ -587,12 +673,43 @@ In spaCy, attributes that return strings usually end with an underscore – attr
 - dobj	--direct object	          直接宾语
 - det      --determiner	            指代词
 
-1. `token.pos_`   单词的词性 动词\名词\形容词
-`token.dep_`   returns the predicted dependency label.
-`token.head.text`  returns the syntactic head token
+在spaCy中，返回字符串的属性通常以下划线结尾——没有下划线的属性返回整数ID值。
+1. `token` 
+`token.pos_`   		单词的词性 动词 \ 名词 \ 形容词
+`token.dep_`         	       语法成分
+`token.head.text`           相关联的词
+`token.label_`      单词属性
+`token.text`	分词文本
 
-2. The` doc.ents` property lets you access the named entities predicted by the model, It returns an iterator of Span objects
+```python
+token.pos_  
+	'PUNCT'  'punctuation'  标点
+'PROPN' 'proper noun' 专有名词
+ADP  'adposition' 介词
+SYM symbol  符号
+NUM  number 数字
 
+ADJ: adjective                 形容词
+ADP: adposition                介词
+ADV: adverb                    副词
+AUX: auxiliary verb            助动词
+CONJ: coordinating conjunction 并列连接词
+DET: determiner                限定词
+INTJ: interjection            感叹词
+NOUN: noun                     名词
+NUM: numeral                   数字
+PART: particle                 
+PRON: pronoun                  代词
+PROPN: proper noun             专有名词
+PUNCT: punctuation             标点
+SCONJ: subordinating conjunction
+SYM: symbol                    符号
+VERB: verb                     动词
+X: other                       其他
+
+```
+2. `doc`
+The` doc.ents` property lets you access the named entities predicted by the model, It returns an iterator of Span objects
 
 ```python
 import spacy
@@ -621,12 +738,24 @@ $1 billion MONEY
 spacy.explain("GPE")
 ```
 
+3. `span`
+
+
+
+
 ### matcher
 >类似正则表达式, 用来在文本中匹配所需要的词语
+>
+>Match patterns are lists of dictionaries. Each dictionary describes one token. The keys are the names of token attributes, mapped to their expected values.
 ```python
+[{"TEXT": "iPhone"}, {"TEXT": "X"}]
+[{"LOWER": "iphone"}, {"LOWER": "x"}]
+[{"LEMMA": "buy"}, {"POS": "NOUN"}]
+
 import spacy
 from spacy.matcher import Matcher
 
+# Load a model and create the nlp object
 nlp = spacy.load("en_core_web_sm")
 
 # Initialize the matcher with the shared vocab
@@ -635,10 +764,6 @@ matcher = Matcher(nlp.vocab)
 # Add the pattern to the matcher
 pattern = [{"TEXT": "iPhone"}, {"TEXT": "X"}]
 matcher.add("IPHONE_PATTERN", None, pattern)
-#The first argument is a unique ID to identify which pattern was matched
-#The second argument is an optional callback.
-#The third argument is the pattern.
-
 
 # Process some text
 doc = nlp("Upcoming iPhone X release date leaked")
@@ -651,35 +776,44 @@ for match_id, start, end in matches:
     # Get the matched span
     matched_span = doc[start:end]
     print(matched_span.text)
-    
-------------------------------------------------------------------------
-Write one pattern that only matches forms of “download” (tokens with the lemma “download”), followed by a token with the part-of-speech tag "PROPN" (proper noun).
-LEMMA
-import spacy
-from spacy.matcher import Matcher
 
-nlp = spacy.load("en_core_web_sm")
-matcher = Matcher(nlp.vocab)
-
-doc = nlp(
-    "i downloaded Fortnite on my laptop and can't open the game at all. Help? "
-    "so when I was downloading Minecraft, I got the Windows version where it "
-    "is the '.zip' folder and I used the default program to unpack it... do "
-    "I also need to download Winzip?"
-)
-
-# Write a pattern that matches a form of "download" plus proper noun
-pattern = [{"LEMMA": "download"}, {"POS": "PROPN"}]
-
-# Add the pattern to the matcher and apply the matcher to the doc
-matcher.add("DOWNLOAD_THINGS_PATTERN", None, pattern)
-matches = matcher(doc)
-print("Total matches found:", len(matches))
-
-# Iterate over the matches and print the span text
-for match_id, start, end in matches:
-    print("Match found:", doc[start:end].text)
 ```
+
+### 相似度比较
+en_core_web_md      -----(medium model)
+en_core_web_lg        -----(large model)
+en_core_web_sm      -----(small model)
+
+词向量的比较，默认余弦相似度
+句子中默认词向量求平均
+
+
+### pipe
+```python
+BAD:
+docs = [nlp(text) for text in LOTS_OF_TEXTS]
+GOOD:
+docs = list(nlp.pipe(LOTS_OF_TEXTS))
+
+
+# --------->>selective processing<<-------------
+# only tokenize the text using nlp.make_doc
+doc = nlp.make_doc(text)
+print([token.text for token in doc])
+
+# Disable the tagger and parser
+with nlp.disable_pipes("tagger", "parser"):
+    # Process the text
+    doc = nlp(text)
+```
+
+## faiss
+
+
+
+
+
+
 
 
 # CV
@@ -690,15 +824,45 @@ for match_id, start, end in matches:
 
 
 # python
+```python
+- python
+在终端输入python后，就能进入解释器
+`>>>`是提示符（prompt），告诉你可以输入指令
+如果想要退出，可以输入 exit() 或者按 Ctrl + D
+运行python程序,输入一个终端 python + 文件名.py
 
+- ipython
+b?            # 返回基本信息 / b?? #返回源代码
+np.*load*?    # 显示Numpy顶级命名空间中含有“load”的所有函数
+
+%run test.py  # 假设为当前路径
+%timeit np.dot(a, a) 
+%matplotlib inline # 直接在jupyter中画图
+任何代码在执行时，只要按下“Ctrl + C”，就会应发一个KeyboardInterrupt
+绝大部分情况下都将立即停止执行
+
+# shift + tab 反向缩进
+# 选中 tab 多行缩进
+
+isinstance(a, (int, float)) # 判断a是否是int, float类型
+
+exit # 退出
+
+jupyter-lab --port 8889
+```
 ## 第三方库安装
 ```shell
 pip install Package_name
-pip show --files Package_name     # 查看pip uninstall SomePackage的详细信息
-pip list --outdated               # 检查哪些包需要更新
+pip show --files Package_name      # 查看pip uninstall SomePackage的详细信息
+pip list --outdated                # 检查哪些包需要更新
 pip install --upgrade Package_name # 升级包
 pip uninstall Package_name         # 卸载包
+pip install model_name==0.1.20
+pip list 					     # 查看所有包
+# 安装路径'\Install\python3.7\Lib'下，点击site-packages
 
+!pip install Package_name          # jupyter内使用
+numpy.__version__
 ```
 
 ## 版本控制
@@ -718,6 +882,11 @@ conda install package_name
 conda remove -n env_name numpy   # 删除package
 conda update -n env_name numpy   # 更新package
 conda update -n base conda       # 更新conda，保持conda最新
+
+所有包：conda update --all
+安装包：conda install package
+更新包：conda update package
+查询某个conda指令使用-h后缀，如 conda update -h
 ```
 
 ### virtualenv
@@ -730,6 +899,23 @@ rm -rf venv
 
 pip list
 ```
+## 多线程
+```python
+
+
+
+
+```
+
+
+
+
+## GPU
+```python
+lspci | grep -i nvidia  # 查看GPU版本
+
+```
+
 ## 模块化
 
 - `__pycache__文件夹`
@@ -746,20 +932,46 @@ from . import XXX
 
 ```
 
+## 转义字符
+在windows系统当中读取文件路径可以使用\,但是在python字符串中\有转义的含义，如\t可代表TAB，\n代表换行，所以我们需要采取一些方式**使得\不被解读为转义字符**。
+目前有3个解决方案:
+```
+1、在路径前面加r，即保持字符原始值的意思。
+sys.path.append(r'c:\Users\mshacxiang\VScode_project\web_ddt')
 
-## print
+2、替换为双反斜杠
+sys.path.append('c:\\Users\\mshacxiang\\VScode_project\\web_ddt')
+
+3、替换为正斜杠
+sys.path.append('c:/Users/mshacxiang/VScode_project/web_ddt')
+```
+
+## map
 ```python
-print('the x is : {}'.format(x))
+# 将function应用于iterable的每一个元素，结果以列表的形式返回
+# 用于series的map方法接受一个函数，或是一个字典，包含着映射关系即可
 
+map(func, iterable) # 函数名, 可以迭代的对象，例如列表，元组，字符串
+data.map(func)          # 将func应用到data中
+```
+
+## lambda
+```python
+# 需要有传入参数
+g = lambda x, y, z : (x + y) ** z
+print g(1,2,2)
+
+map(lambda x: x * x, [y for y in range(10)])
 ```
 
 ## enumerate
 ```python
-    >>>seasons = ['Spring', 'Summer', 'Fall', 'Winter']
-    >>> list(enumerate(seasons))
-    [(0, 'Spring'), (1, 'Summer'), (2, 'Fall'), (3, 'Winter')]
-    >>> list(enumerate(seasons, start=1))       # 下标从 1 开始
-    [(1, 'Spring'), (2, 'Summer'), (3, 'Fall'), (4, 'Winter')]
+>>>seasons = ['Spring', 'Summer', 'Fall', 'Winter']
+>>> list(enumerate(seasons))
+[(0, 'Spring'), (1, 'Summer'), (2, 'Fall'), (3, 'Winter')]
+
+>>> list(enumerate(seasons, start=1))       # 下标从 1 开始
+[(1, 'Spring'), (2, 'Summer'), (3, 'Fall'), (4, 'Winter')]
 ```
 
 ## flatten()函数用法
@@ -781,18 +993,132 @@ array([1, 2, 3, 4, 5, 6])
 ```
 
 
+
+# pyspark
+
+```python
+***Dataframe***
+df = hc.sql('')
+df.show()
+df.columns
+df.printSchema()
+df.collect()
+df.toPandas()
+df.count()
+-------------------
+
+-------------------
+sc = SparkContext(conf=)
+hc = HiveContext(sc)
+df.registerTempTable('t')
+hc.sql('''drop table if exists dbname''')
+hc.sql('''create table dbname as select * from t''')
+--------------------
+#建立新列
+df.withColumn('new_col',fn.monotonically_increasing_id())
+
+df.where('col_name == 2')
+
+df.select('col_name1', 'col_name2')
+
+df.select([c for c in df.columns if c != 'col_name'])
+
+df.drop('col_name')
+df.drop(df.col_name)
+
+cond = [df.name == df3.name, df.age == df3.age] 
+df.join(df3, cond, 'outer')
+-------------------------
+import pyspark.sql.functions as fn
+pd.agg(fn.count('col_name').alias('new_name'),
+	   fn.countDistinct('col_name').alias('distin_name')).show()
+-----------------------------
+df.groupby('col_name').count().show()
+df.agg(min(col('col_name'))).show()
+-------------------
+*时间( )
+
+#提取年月日xxxx-xx-xx
+df.select(to_date(df.col_time).alias(col_name))
+
+df.withColumn('new_col',to_date(df.col_time)) # 返回添加new_col后的全量df
+
+df.select(
+	year('col_time').alias('new_name'),
+	month('col_time').alias('new_name'),
+	day('col_time').alias('new_name')
+)
+-----------------------
+df.agg(*[
+	(1 - (fn.count(c)/fn.count('*'))).alias(c+'_missing')
+	for c in df.columns
+])#缺失值比例
+------------------------
+df.filter((df['col_name1'] < 200) & (df['col_name2'] > 200))
+df.filter("col_name1 < 500").select(['col_name1','col_name2'])
+```
+
+
+
 # numpy
+
+```python
+np.delete(arr, [need_delet_idx], 0) #  0行  1列
+
+
+
+```
+
+
 
 
 
 
 # pandas
-	data = pd.DataFrame()
+
+```python
+import pandas as pd 
+from pandas import Series, DataFrame
+data = pd.DataFrame()
+
+pd.set_option('display.max_rows',20)
+pd.set_option('display.max_columns',20)
+pd.options.display.max_columns = None
+```
+
+## Series
+```python
+s = pd.Series([4, 7, -5, 3], index=) 
+# pd.Series([4, 7, -5, 3], index=['d', 'b', 'a', 'c'])
+
+s = pd.Series(dict, index=)
+pd.isnull(s) # pd.notnull(s)
+s.name
+s.index  # s.index.name 
+df.reindex(['index的重新排列组合'], fill_value='missing') # 无法对应的缺失填补
+s.values
+s[0]        # s['index_name'] 行位置索引 行标签索引均可
+s[s > 2]    # s[np.abs(s) > 3]
+s.unique()  # 去重
+s[s.isin(['a', 'b', 'c'])] 
+# s.isin(['a', 'b', 'c']) / True False # 筛选包含['a', 'b', 'c']的行
+```
+
 
 ## 列名
-	X_.add_suffix('_suffix')
+```python
+X_.add_suffix('_suffix')
+# 删除列
+del df['col_name']
+df = df.drop(columns=['col_name1', 'col_name2'])
 
-## 
+# 列改名
+df.rename(columns={'col_name1':'new_name', 'col_name2': 'new_name'}, inplace=True)
+
+# 新建列
+df['col_name'] = df.col_name1 * df.col_name2
+```
+
 
 ## 分割训练 / 测试 
 ```python
@@ -804,7 +1130,6 @@ X_valid = X[X.question_id.isin(question_ids_valid)]
 ```
 
 ## pandas简化内存
-
 ```
 
 ```
@@ -835,6 +1160,9 @@ array([[1, 0, 2],
 （2）shape表示矩阵的形状
 （3）indices表示对应data中的数据，在压缩后矩阵中各行的下标，如：数据1在某行的0位置处，数据2在某行的2位置处，数据6在某行的2位置处。
 （4）indptr表示压缩后矩阵中每一行所拥有数据的个数，如：[0 2 3 6]表示从第0行开始数据的个数，0表示默认起始点，0之后有几个数字就表示有几行，第一个数字2表示第一行有2 - 0 = 2个数字，因而数字1，2都第0行，第二行有3 - 2 = 1个数字，因而数字3在第1行，以此类推。
+
+
+
 
 # sklearn
 
