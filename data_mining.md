@@ -887,6 +887,11 @@ conda update -n base conda       # 更新conda，保持conda最新
 安装包：conda install package
 更新包：conda update package
 查询某个conda指令使用-h后缀，如 conda update -h
+
+conda clean -p      //删除没有用的包
+pip --no-cache-dir install 
+sudachipy
+sudachidict_core
 ```
 
 ### virtualenv
