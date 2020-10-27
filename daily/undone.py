@@ -24,3 +24,5 @@ df.drop_duplicats(subset = ['price','cnt'],keep='last',inplace=True)
 
 8.2 Merging on Index
 np.where(pd.isnull(s1), s2, s1)
+
+--------------------------------
