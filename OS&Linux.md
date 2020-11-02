@@ -6,7 +6,7 @@
 
 ---
 
-p36
+p39
 
 ---
 
@@ -73,7 +73,7 @@ groupdel 组名 # 删除
 useradd -g 用户组名 用户名
 usermod -g 用户组名 用户名 # 修改用户所属组
 ```
-### 用户suoyou
+### 用户所属
 ```shell
 ls -ahl # 查看文件所有者
 
@@ -83,6 +83,40 @@ chgrp 组名 文件名   # 修改文件所在组
 
 usremod -g 组名 用户名 # 改变用户所在组
 ```
+
+### 权限管理
+
+![image-20201027163446713](OS&Linux.assets/image-20201027163446713.png)
+
+0-9 位说明
+
+1)第 0 位确定文件类型(d, - , l , c , b)
+
+2)第 1-3 位确定所有者（该文件的所有者）拥有该文件的权限    ---User
+
+3)第 4-6 位确定所属组（同用户组的）拥有该文件的权限    ---Group
+
+4)第 7-9 位确定其他用户拥有该文件的权限    ---Other
+
+![image-20201027170453437](OS&Linux.assets/image-20201027170453437.png)
+
+```shell
+# chmod 修改文件目录权限
+u:所有者	g:所有组	o:其他人	a:所有人(u、g、o 的总和)
+chmod u=rwx,g=rx,o=x	# 文件目录名
+chmod o+w	# 文件目录名
+chmod a-x	# 文件目录名
+
+chown newowner file	# 改变文件的所有者
+chown newowner:newgroup	file	# 改变用户的所有者和所有组
+chown -R newowner /home/yuty/ # 递归改变目录下的所有文件
+
+# 修改文件所在组
+chgrp newgroup file
+chgrp -R newgroup /home/yuty/
+```
+
+
 
 ## 环境配置
 
@@ -204,6 +238,272 @@ cat hello.txt | grep yes # 在文件hello.txt中查找 yes
 
 
 
+## 定时任务
+
+![530ac5cdbd5fdf70fa08d63c4c265062.png](file:///C:/Users/yuty/AppData/Local/Temp/enhtmlclip/Image.png)
+
+<img src="OS&amp;Linux.assets/Image(1).png" alt="f5463394eadc1d051cca2b0be957d688.png" style="zoom:150%;" />
+
+![95aa139c47fb0455d8f3cf6850fbef5d.png](OS&Linux.assets/Image(2).png)
+
+![image-20201102102432422](OS&Linux.assets/image-20201102102432422.png)
+
+
+
+
+```shell
+# crontab
+crontable -e
+*/1 * * * * ls -l /etc >> /tmp/to.txt
+
+# 案例 2：每隔 1 分钟， 将当前日期和日历都追加到 /home/mycal文件中
+/home/mytask2.sh # 1. 先编写一个文件
+
+# 2. 写入文件
+date >> /tmp/mycal 
+cal >> /tmp/mycal
+
+# 3. 给 mytask1.sh 一个可以执行权限
+chmod 744 /home/mytask2.sh
+
+crontab -e # 4. 写入定时任务
+*/1 * * * * /home/mytask2.sh
+
+
+conrtab –r # 终止任务调度
+crontab –l # 列出当前有那些任务调度
+
+service crond restart  # 重启任务调度
+```
+
+## 磁盘管理
+
+![2669_1](OS&Linux.assets/2669_1.png)
+
+![2670_1](OS&Linux.assets/2670_1.png)
+
+
+- mbr 分区：
+1. 最多支持四个主分区
+2. 系统只能安装在主分区
+3. 扩展分区要占一个主分区
+
+- gtp 分区：
+1. 支持无限多个主分区（但操作系统可能限制，比如 windows 下最多 128 个分区）
+2. 最大支持 18EB 的大容量（1EB=1024 PB，1PB=1024 TB&nbsp; ）
+3. windows7 64 位以后支持 gtp
+4. MBR 最大只支持 2TB，但拥有最好的兼容性
+
+![2673_1](OS&Linux.assets/2673_1.png)
+
+![2672_1](OS&Linux.assets/2672_1.png)
+
+```shell
+lsblk  # 磁盘情况
+lsblk -f
+
+# 查询系统整体磁盘使用情况
+df -l
+df -lh
+
+# 查询指定目录的磁盘占用情况
+du -h    /目录  # 默认为当前目录
+-s              # 指定目录占用大小汇总
+-h              # 带计量单位
+-a              # 含文件
+--max-depth=1  # 子目录深度
+-c              # 列出明细的同时，增加汇总值
+
+# 查询  /opt 目录的磁盘占用情况，深度为 1
+du -ach --max-depth=1 /opt
+
+fdisk /dev/sdb  # 分区
+mkf -t ext4 /dev/sdb1# 格式化
+
+# 挂载: 将一个分区与一个目录联系起来，
+# mount 设备名称 挂载目录
+mount /dev/sdb1 /newdisk
+
+# umount 设备名称 或者 挂载目录
+umount /dev/sdb1 或者 umount /newdisk
+
+```
+![image-20201102103733049](OS&Linux.assets/image-20201102103733049.png)
+
+![4700150c68f3fc37d5ba77cef9f36d3e.png](OS&Linux.assets/Image(5).png)
+
+## 进程管理
+
+![2680_1](OS&Linux.assets/2680_1.png)
+
+![2678_1](OS&Linux.assets/2678_1.png)
+
+### 查看进程
+```shell
+# ps 
+# 指令说明System V 展示风格
+"""
+USER：用户名称
+PID：进程号
+%CPU：进程占用 CPU 的百分比
+%MEM：进程占用物理内存的百分比
+TT：终端名称,缩写 .
+STAT：进程状态，其中 S-睡眠，s-表示该进程是会话的先导进程，N-表示进程拥有比普通优先级更低的优先级，R-正在运行，D-短期等待，Z-僵死进程，T-被跟踪或者被停止等等
+STARTED：进程的启动时间
+TIME：CPU 时间，即进程使用 CPU 的总时间
+COMMAND：启动进程所用的命令和参数，如果过长会被截断显示
+"""
+
+ps -aux | more         # 显示系统执行的进程
+ps -aux | grep sshd   # 查看包含sshd进程
+ps -ef | more   # 显示父进程
+
+
+# 查看进程树 pstree
+pstree -p # 显示进程的 PID
+pstree -u # 显示进程的所属用户
+
+
+```
+### 杀死进程
+```shell
+kill [选项] 进程号 # 通过进程号杀死进程   -9 表示强迫进程立即停止
+kill 3980
+
+killall 进程名称   #通过进程名称杀死进程，也支持通配符
+```
+
+## 服务管理
+服务(service) 本质就是进程，但是是运行在后台的，通常都会监听某个端口，等待其它程序的请求，比如(mysql , sshd 防火墙等)，因此我们又称为守护进程。
+在 CentOS7.0 后 不再使用 service ,而是 systemctl
+
+![2682_1](OS&Linux.assets/2682_1.jpg)
+
+```shell
+# 查看服务名
+setup
+ls -l /etc/init.d/      # 查看服务
+
+# service
+service 服务名 [start | stop | restart | reload | status]
+
+service iptables status
+service iptables stop
+service iptables start
+
+telnet ip地址 端口号
+```
+
+### 运行级别
+- Linux 系统有 7 种运行级别(runlevel)：常用的是级别 3 和 5
+运行级别 0：系统停机状态，系统默认运行级别不能设为 0，否则不能正常启动
+运行级别 1：单用户工作状态，root 权限，用于系统维护，禁止远程登陆
+运行级别 2：多用户状态(没有 NFS)，不支持网络
+运行级别 3：完全的多用户状态(有 NFS)，登陆后进入控制台命令行模式
+运行级别 4：系统未使用，保留
+运行级别 5：X11 控制台，登陆后进入图形 GUI 模式
+运行级别 6：系统正常关闭并重启，默认运行级别不能设为 6，否则不能正常启动
+
+开机的流程说明：
+
+![2683_1](OS&Linux.assets/2683_1.png)
+
+
+``` shell
+# chkconfig 指令
+# 给每个服务的各个运行级别设置自启动/关闭
+chkconfig --list
+chkconfig --list | grep xxx # 过滤
+chkconfig iptables -- list
+
+chkconfig --level 5 iptables off
+
+reboot  # 重启后生效
+```
+
+
+### 动态监控
+top 在执行一段时间可以更新正在运行的的进程
+
+![2684_0](OS&Linux.assets/2684_0.png)
+
+![2685_0 (OS&Linux.assets/2685_0%20(1).png)](C:/Users/yuty/AppData/Local/Temp/2685_0%20(1).png)
+
+```shell
+top
+k：然后输入“k”回车，再输入要结束的进程 ID 号
+
+top -d 10 # 系统状态更新的时间 每隔 10 秒自动更新
+
+VIRT：virtual memory usage 虚拟内存
+RES：resident memory usage 常驻内存
+SHR：shared memory 共享内存
+
+q – 退出 top
+```
+
+### 系统网络情况
+
+```shell
+netstat -anp
+-an    # 按一定顺序排列输出
+-p     # 显示哪个进程在调用
+
+netstat -anp | more
+netstat -anp | grep xxx
+
+```
+
+
+## RPM & YUM
+
+### RPM
+RPM 是 RedHat Package Manager（RedHat 软件包管理工具）的缩写
+一种用于互联网下载包的打包及安装工具
+
+![2686_0](OS&Linux.assets/2686_0.png)
+
+
+```shell
+rpm -qa               # 查询所安装的所有 rpm 软件包
+rpm –qa | grep xxx # 查询是否安装了xxx
+rpm -qa | more     # 分页显示
+
+rpm -qi  软件包名   # 查询软件包信息
+
+rpm -ql  软件包名   # 查询软件包中包含的文件
+
+rpm -qf 文件全路径名  # 查询目录所属的软件包
+rpm -qf /etc/passwd 
+
+# 卸载rpm包
+rpm -e 软件包名
+rpm -e foo
+rpm -e --nodeps foo # 强制删除
+
+# 安装rpm包
+rpm -ivh 软件包全路径名称
+i=install    # 安 装
+v=verbose # 提 示
+h=hash     # 进度条
+
+```
+
+### yum
+yum 是一个 Shell 前端软件包管理器。基于 RPM 包管理，能够从指定的服务器自动下载 
+RPM 包并且安装，可以自动处理依赖性关系，并且一次安装所有依赖的软件包
+
+```shell
+# 查询 yum 服务器是否有需要安装的软件
+yum list | grep xxx # 软件列表
+
+yum install firefox
+
+```
+
+
+
+
 
 
 
@@ -308,7 +608,7 @@ copy /b 1.zip.001+1.zip.002+1.zip.003 1.zip
 # 文件之间用加号+连接不能有空格, 另一种写法： copy /b 1.* 1.zip
 ```
 
-### 网络结构 （VM虚拟机）
+## 网络结构 （VM虚拟机）
 
 ![image-20201021160550327](OS&Linux.assets/image-20201021160550327.png)
 
